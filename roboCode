@@ -2,6 +2,7 @@
 package org.usfirst.frc.team5323.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -9,6 +10,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
+
+import java.util.Math;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -59,7 +62,14 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	rDrive.arcadeDrive(leftJoy);
+    	
+    	if(leftJoy.getY()==0 && leftJoy.getX()==0){
+    		talonLeft.set(.00);
+    		talonRight.set(.00);
+    	}
+    	else if(leftJoy.getY()<0 && leftJoy.getY()<0){
+    		talonRight.set(java.lang.Math.sqrt(RUSSEL IS A FUCKING RETARD))
+    	}
     	
     	if(!leftJoy.getRawButton(3)&&!leftJoy.getRawButton(2)){
     		pully.set(0.0);
