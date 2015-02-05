@@ -1,7 +1,7 @@
-
 package org.usfirst.frc.team5323.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
@@ -10,8 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
-
-import java.util.Math;
+import java.lang.Math;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,14 +30,20 @@ public class Robot extends IterativeRobot {
 	Joystick rightJoy;
 	Talon talonLeft;
 	Talon talonRight;
+	Talon talonArm;
 	Timer clock;
 	Victor pully;
+	private double speedLeftY;
+	private double speedLeftX;
+	private double speedRightY;
+	private double speedRightX;
 	
     public void robotInit() {
     	leftJoy = new Joystick(0);
     	rightJoy = new Joystick(1);
-    	talonLeft = new Talon(0);
-    	talonRight = new Talon(2);
+    	talonLeft = new Talon(2);
+    	talonRight = new Talon(0);
+    	talonArm = new Talon(4);
     	rDrive = new RobotDrive(talonLeft,talonRight);
     	clock = new Timer();
     	pully = new Victor(3);
@@ -51,8 +56,8 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     	clock.start();
     	if(clock.get()<=100){
-    		talonLeft.set(0.25);
-    		talonRight.set(-0.25);
+    		talonLeft.set(0.1);
+    		talonRight.set(-0.1);
     	}
     		
     	}
@@ -62,15 +67,38 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	
-    	if(leftJoy.getY()==0 && leftJoy.getX()==0){
+    	speedLeftY = leftJoy.getY();
+    	speedLeftX = leftJoy.getX();
+    	speedRightY = rightJoy.getY();
+    	speedRightX = rightJoy.getX();
+    	/*if(speedY==0 && speedY==0){
     		talonLeft.set(.00);
     		talonRight.set(.00);
     	}
-    	else if(leftJoy.getY()<0 && leftJoy.getY()<0){
-    		talonRight.set(java.lang.Math.sqrt(RUSSEL IS A FUCKING RETARD))
+    	*/
+    	if(speedLeftY>0){
+    		talonLeft.set(-(Math.pow(speedLeftY, 2)));
+    	}
+    	if(speedLeftY<0){
+    		talonLeft.set(Math.pow(speedLeftY, 2));
+    	}
+    	if(speedRightY>0){
+    		talonRight.set(Math.pow(speedRightY, 2));
+    	}
+    	if(speedRightY<0){
+    		talonRight.set(-(Math.pow(speedRightY, 2)));
     	}
     	
+    	if(!leftJoy.getRawButton(4)&&!leftJoy.getRawButton(5)){
+    		talonArm.set(0.0);
+    	}
+    	
+    	else if(leftJoy.getRawButton(4)){
+    		 talonArm.set(0.75);
+    	}
+    	else if(leftJoy.getRawButton(5)){
+    		talonArm.set(-0.75);
+    		
     	if(!leftJoy.getRawButton(3)&&!leftJoy.getRawButton(2)){
     		pully.set(0.0);
     	}
@@ -81,12 +109,8 @@ public class Robot extends IterativeRobot {
     	else if(leftJoy.getRawButton(2)){
     		pully.set(-0.75);
     		
-    	
+    	}  
     	}
-        if(leftJoy.getRawButton(5)){
-        	System.out.print(leftJoy.getButtonCount());
-        }
-                                                                      
         }
   
     
